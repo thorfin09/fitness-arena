@@ -1,0 +1,278 @@
+/* Premium Design System for fitnessArena */
+
+:root {
+  /* Curated Cyber-Athletic Palette */
+  --accent-color: #ff3c00;      /* Fire Crimson */
+  --accent-secondary: #ff9d00;  /* Gold Amber */
+  --accent-rgb: 255, 60, 0;
+  
+  /* Fonts */
+  --font-title: 'Oswald', 'Rajdhani', sans-serif;
+  --font-body: 'Outfit', sans-serif;
+  
+  /* System transitions (slow, organic ease) */
+  --transition-premium: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  
+  /* Dark Mode Variables (Default for Cinematic Vibe) */
+  --bg-color: #030407;
+  --bg-card: rgba(10, 12, 20, 0.65);
+  --bg-nav: rgba(3, 4, 7, 0.85);
+  --bg-card-hover: rgba(16, 20, 32, 0.85);
+  --text-color: #f3f4f6;
+  --text-muted: #9ca3af;
+  --border-color: rgba(255, 60, 0, 0.15);
+  --shadow-premium: 0 20px 50px rgba(0, 0, 0, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="light"] {
+  /* Light Mode Fallback but retains premium aesthetic */
+  --bg-color: #f3f5f8;
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --bg-nav: rgba(243, 245, 248, 0.85);
+  --bg-card-hover: #ffffff;
+  --text-color: #0d0f14;
+  --text-muted: #5e6b7e;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --shadow-premium: 0 15px 35px rgba(0, 0, 0, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.8);
+}
+
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-body);
+  transition: background-color 0.8s ease, color 0.8s ease;
+  overflow-x: hidden;
+  line-height: 1.65;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 60, 0, 0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* RTL Layout for Urdu */
+[dir="rtl"] {
+  --font-title: 'Noto Naskh Arabic', 'Oswald', sans-serif;
+  --font-body: 'Noto Naskh Arabic', sans-serif;
+}
+
+/* Modern Typography overrides */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 700;
+  line-height: 1.05;
+}
+
+/* Background Parallax text belts */
+.parallax-text-belt {
+  font-family: var(--font-title);
+  font-size: clamp(6rem, 15vw, 16rem);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.02);
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.03);
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+[data-theme="light"] .parallax-text-belt {
+  color: rgba(0, 0, 0, 0.015);
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.02);
+}
+
+/* High-End Spotlight effect */
+.spotlight {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80vw;
+  height: 80vw;
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.08) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(80px);
+}
+
+/* Premium Buttons */
+.btn-beast {
+  position: relative;
+  background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-secondary) 100%);
+  color: #ffffff;
+  padding: 1rem 2.5rem;
+  font-family: var(--font-title);
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: var(--transition-premium);
+  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.3);
+}
+
+.btn-beast::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+  transition: var(--transition-premium);
+}
+
+.btn-beast:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(var(--accent-rgb), 0.65);
+}
+
+.btn-beast:hover::before {
+  left: 100%;
+}
+
+.btn-outline-beast {
+  background: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--text-color);
+  padding: 0.95rem 2.4rem;
+  font-family: var(--font-title);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-premium);
+  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.btn-outline-beast:hover {
+  background: var(--text-color);
+  color: var(--bg-color);
+  transform: translateY(-2px);
+}
+
+/* Glass Panels with neon accent glows */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-premium);
+  border-radius: 16px;
+  transition: var(--transition-premium);
+  position: relative;
+}
+
+.glass-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,60,0,0.1) 0%, transparent 40%, rgba(255,157,0,0.05) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glass-panel:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(var(--accent-rgb), 0.15);
+  border-color: rgba(255, 60, 0, 0.35);
+}
+
+/* Location Highlight Badge */
+.location-badge {
+  background: rgba(255, 60, 0, 0.1);
+  border: 1px solid rgba(255, 60, 0, 0.25);
+  color: var(--accent-color);
+  font-family: var(--font-title);
+  padding: 0.3rem 1rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Visual highlights */
+.glow-text {
+  background: linear-gradient(135deg, #ffffff 30%, rgba(255, 255, 255, 0.5) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glow-accent {
+  background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 40px rgba(var(--accent-rgb), 0.25);
+}
+
+/* Custom $10,000 layout utilities */
+.hero-title-text {
+  font-size: clamp(3.8rem, 10vw, 8.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.8;
+  letter-spacing: -0.01em;
+}
+
+.section-title {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 3.5rem;
+  position: relative;
+  display: inline-block;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 15%;
+  width: 70%;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+}
