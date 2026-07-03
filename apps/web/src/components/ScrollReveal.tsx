@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
 interface ScrollRevealProps {
   children: React.ReactNode;
@@ -50,9 +50,15 @@ export const RollingPlateDivider: React.FC = () => {
     offset: ['start end', 'end start'],
   });
 
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 25,
+    restDelta: 0.001
+  });
+
   // Calculate plate rolling horizontally and spinning
-  const plateX = useTransform(scrollYProgress, [0.1, 0.9], ['-10%', '110%']);
-  const plateRotate = useTransform(scrollYProgress, [0.1, 0.9], [0, 720]);
+  const plateX = useTransform(smoothProgress, [0.1, 0.9], ['-10%', '110%']);
+  const plateRotate = useTransform(smoothProgress, [0.1, 0.9], [0, 720]);
 
   return (
     <div
@@ -107,7 +113,6 @@ export const RollingPlateDivider: React.FC = () => {
         <span style={{ width: '2px', height: '10px', backgroundColor: '#334155' }} />
       </div>
 
-      {/* The rolling weight plate */}
       <motion.div
         style={{
           position: 'absolute',
@@ -117,6 +122,7 @@ export const RollingPlateDivider: React.FC = () => {
           x: plateX,
           rotate: plateRotate,
           cursor: 'grab',
+          willChange: 'transform',
         }}
         whileDrag={{ scale: 1.15 }}
       >

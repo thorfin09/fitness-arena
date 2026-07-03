@@ -1,13 +1,19 @@
 import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
 export const CinematicPlateBg: React.FC = () => {
   const { scrollYProgress } = useScroll();
 
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 25,
+    restDelta: 0.001
+  });
+
   // Scroll bindings for the weight plate
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 360]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.3, 0.9]);
-  const opacity = useTransform(scrollYProgress, [0, 0.25, 0.8, 1], [0.16, 0.22, 0.12, 0.05]);
+  const rotate = useTransform(smoothProgress, [0, 1], [0, 360]);
+  const scale = useTransform(smoothProgress, [0, 0.5, 1], [1, 1.3, 0.9]);
+  const opacity = useTransform(smoothProgress, [0, 0.25, 0.8, 1], [0.16, 0.22, 0.12, 0.05]);
 
   return (
     <div
@@ -23,6 +29,7 @@ export const CinematicPlateBg: React.FC = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.65))', // GPU accelerated drop-shadow on parent
       }}
     >
       {/* Dim spotlight overlay to ensure text readability on top of background */}
@@ -49,7 +56,7 @@ export const CinematicPlateBg: React.FC = () => {
           scale,
           opacity,
           zIndex: 0,
-          filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.75)) blur(1px)',
+          willChange: 'transform', // Forces hardware-accelerated composite layer
         }}
       >
         <svg
@@ -60,7 +67,7 @@ export const CinematicPlateBg: React.FC = () => {
           xmlns="http://www.w3.org/2000/svg"
         >
           {/* Outermost rim border */}
-          <circle cx="100" cy="100" r="92" fill="#0d0e12" stroke="#ff3c00" strokeWidth="3" />
+          <circle cx="100" cy="100" r="92" fill="#0d0e12" stroke="var(--accent-color)" strokeWidth="3" />
           <circle cx="100" cy="100" r="88" fill="#12131a" stroke="#2a2c36" strokeWidth="1" />
 
           {/* Cast Iron concentric ribs */}
@@ -92,7 +99,7 @@ export const CinematicPlateBg: React.FC = () => {
             d="M 170,100 A 70,70 0 0,1 30,100"
             fill="none"
           />
-          <text fill="#ff3c00" fontSize="9" fontWeight="bold" letterSpacing="0.25em" style={{ fontFamily: 'var(--font-title)' }}>
+          <text fill="var(--accent-color)" fontSize="9" fontWeight="bold" letterSpacing="0.25em" style={{ fontFamily: 'var(--font-title)' }}>
             <textPath href="#textPathLower" startOffset="50%" textAnchor="middle">
               SAHIBGANJ &bull; JHARKHAND
             </textPath>

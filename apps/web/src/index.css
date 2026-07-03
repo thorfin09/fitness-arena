@@ -2,9 +2,9 @@
 
 :root {
   /* Curated Cyber-Athletic Palette */
-  --accent-color: #ff3c00;      /* Fire Crimson */
-  --accent-secondary: #ff9d00;  /* Gold Amber */
-  --accent-rgb: 255, 60, 0;
+  --accent-color: #00e5ff;      /* Electric Cyan */
+  --accent-secondary: #00ff87;  /* Volt Mint */
+  --accent-rgb: 0, 229, 255;
   
   /* Fonts */
   --font-title: 'Oswald', 'Rajdhani', sans-serif;
@@ -21,7 +21,7 @@
   --bg-card-hover: rgba(16, 20, 32, 0.85);
   --text-color: #f3f4f6;
   --text-muted: #9ca3af;
-  --border-color: rgba(255, 60, 0, 0.15);
+  --border-color: rgba(var(--accent-rgb), 0.15);
   --shadow-premium: 0 20px 50px rgba(0, 0, 0, 0.8);
   --glass-border: rgba(255, 255, 255, 0.03);
 }
@@ -34,9 +34,14 @@
   --bg-card-hover: #ffffff;
   --text-color: #0d0f14;
   --text-muted: #5e6b7e;
-  --border-color: rgba(0, 0, 0, 0.08);
+  --border-color: rgba(var(--accent-rgb), 0.08);
   --shadow-premium: 0 15px 35px rgba(0, 0, 0, 0.05);
   --glass-border: rgba(255, 255, 255, 0.8);
+  
+  /* Override accents in light mode for accessibility */
+  --accent-color: #008fa3;      /* Rich Teal */
+  --accent-secondary: #00b066;  /* Deep Emerald */
+  --accent-rgb: 0, 143, 163;
 }
 
 /* Reset */
@@ -63,7 +68,7 @@ body {
   background: var(--bg-color);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 60, 0, 0.3);
+  background: rgba(var(--accent-rgb), 0.3);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -214,13 +219,13 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--bg-card-hover);
   transform: translateY(-5px);
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(var(--accent-rgb), 0.15);
-  border-color: rgba(255, 60, 0, 0.35);
+  border-color: rgba(var(--accent-rgb), 0.35);
 }
 
 /* Location Highlight Badge */
 .location-badge {
-  background: rgba(255, 60, 0, 0.1);
-  border: 1px solid rgba(255, 60, 0, 0.25);
+  background: rgba(var(--accent-rgb), 0.1);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
   color: var(--accent-color);
   font-family: var(--font-title);
   padding: 0.3rem 1rem;
@@ -275,4 +280,25 @@ h1, h2, h3, h4, h5, h6 {
   width: 70%;
   height: 4px;
   background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+}
+
+/* Responsive Navbar & Scroll Offsets */
+section[id] {
+  scroll-margin-top: 90px;
+}
+
+@media (max-width: 992px) {
+  .nav-links-desktop {
+    gap: 1.25rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-links-desktop,
+  .nav-actions-desktop {
+    display: none !important;
+  }
+  .mobile-nav-toggle {
+    display: block !important;
+  }
 }

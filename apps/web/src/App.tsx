@@ -8,8 +8,8 @@ import ScrollReveal, { RollingPlateDivider } from './components/ScrollReveal';
 import GymSimulator from './components/GymSimulator';
 import AthleteZone from './components/AthleteZone';
 import DumbbellLoader from './components/DumbbellLoader';
-import { Award, ChevronRight, MapPin, Compass, Navigation, Globe } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { Award, ChevronRight, MapPin, Compass, Navigation, Globe, Menu, X } from 'lucide-react';
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 
 export const App: React.FC = () => {
   const { t, token } = useApp();
@@ -18,6 +18,7 @@ export const App: React.FC = () => {
   const [bookingLoading, setBookingLoading] = useState<string | null>(null);
   const [bookingSuccess, setBookingSuccess] = useState<string | null>(null);
   const [bookingError, setBookingError] = useState<string | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   // Parallax Marquee scroll variables
   const containerRef = useRef<HTMLDivElement>(null);
@@ -26,8 +27,14 @@ export const App: React.FC = () => {
     offset: ['start start', 'end end'],
   });
 
-  const belt1X = useTransform(scrollYProgress, [0, 1], ['-20%', '20%']);
-  const belt2X = useTransform(scrollYProgress, [0, 1], ['20%', '-20%']);
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 25,
+    restDelta: 0.001
+  });
+
+  const belt1X = useTransform(smoothProgress, [0, 1], ['-20%', '20%']);
+  const belt2X = useTransform(smoothProgress, [0, 1], ['20%', '-20%']);
 
   useEffect(() => {
     if (loading) return;
@@ -87,27 +94,180 @@ export const App: React.FC = () => {
       {/* Dimmed Olympic Background Plate */}
       <CinematicPlateBg />
 
-      {/* Navigation Header Dock */}
+      {/* Premium Responsive Navbar */}
       <header
         style={{
           position: 'fixed',
-          top: '24px',
-          left: '0',
-          right: '0',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '70px',
+          background: 'var(--bg-nav)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderBottom: '1px solid var(--border-color)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '0 5%',
           zIndex: 100,
-          pointerEvents: 'none',
+          boxShadow: '0 4px 30px rgba(0,0,0,0.15)',
         }}
       >
-        <div style={{ pointerEvents: 'auto', background: 'var(--bg-nav)', backdropFilter: 'blur(16px)', padding: '0.5rem 1.5rem', borderRadius: '30px', border: '1px solid var(--border-color)', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
+        {/* Brand / Logo */}
+        <div 
+          onClick={() => { scrollToSection('hero'); setMobileMenuOpen(false); }} 
+          style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.75rem' }}
+        >
           <GymLogo />
+          <span 
+            style={{ 
+              fontFamily: 'var(--font-title)', 
+              fontSize: '1.35rem', 
+              fontWeight: 800, 
+              letterSpacing: '0.08em',
+              background: 'linear-gradient(135deg, var(--accent-color) 0%, var(--accent-secondary) 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}
+          >
+            {t('brandName').toUpperCase()}
+          </span>
         </div>
-        <div style={{ pointerEvents: 'auto' }}>
+
+        {/* Navigation Links - Desktop Only */}
+        <nav className="nav-links-desktop" style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+          {[
+            { label: 'HOME', id: 'hero' },
+            { label: 'CLASSES', id: 'workouts' },
+            { label: 'SIMULATOR', id: 'simulator' },
+            { label: 'THE COMPOUND', id: 'location-hub' },
+            { label: 'ATHLETE ZONE', id: 'auth-zone' },
+          ].map((item) => (
+            <button
+              key={item.id}
+              onClick={() => scrollToSection(item.id)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--text-color)',
+                fontFamily: 'var(--font-title)',
+                fontSize: '0.95rem',
+                fontWeight: 600,
+                letterSpacing: '0.05em',
+                cursor: 'pointer',
+                transition: 'var(--transition-fast)',
+                opacity: 0.8,
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--accent-color)'; e.currentTarget.style.opacity = '1'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-color)'; e.currentTarget.style.opacity = '0.8'; }}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+
+        {/* Right Actions - Desktop Only */}
+        <div className="nav-actions-desktop" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
           <LanguageThemeSwitcher />
+          <button 
+            onClick={() => scrollToSection('auth-zone')} 
+            className="btn-beast"
+            style={{ padding: '0.5rem 1.25rem', fontSize: '0.9rem' }}
+          >
+            JOIN NOW
+          </button>
         </div>
+
+        {/* Mobile Hamburger Toggle Button */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          style={{
+            display: 'none', // Controlled by CSS media queries
+            background: 'none',
+            border: 'none',
+            color: 'var(--text-color)',
+            cursor: 'pointer',
+            zIndex: 101,
+            padding: '0.5rem',
+          }}
+          className="mobile-nav-toggle"
+          aria-label="Toggle Navigation Menu"
+        >
+          {mobileMenuOpen ? <X size={24} style={{ color: 'var(--accent-color)' }} /> : <Menu size={24} />}
+        </button>
+
+        {/* Mobile Dropdown Drawer */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.25, ease: 'easeInOut' }}
+              style={{
+                position: 'absolute',
+                top: '70px',
+                left: 0,
+                right: 0,
+                background: 'var(--bg-nav)',
+                backdropFilter: 'blur(25px)',
+                WebkitBackdropFilter: 'blur(25px)',
+                borderBottom: '1px solid var(--border-color)',
+                padding: '2rem 5%',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.5rem',
+                zIndex: 99,
+                boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+              }}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                {[
+                  { label: 'HOME', id: 'hero' },
+                  { label: 'CLASSES', id: 'workouts' },
+                  { label: 'SIMULATOR', id: 'simulator' },
+                  { label: 'THE COMPOUND', id: 'location-hub' },
+                  { label: 'ATHLETE ZONE', id: 'auth-zone' },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => { scrollToSection(item.id); setMobileMenuOpen(false); }}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: 'var(--text-color)',
+                      fontFamily: 'var(--font-title)',
+                      fontSize: '1.2rem',
+                      fontWeight: 600,
+                      letterSpacing: '0.07em',
+                      textAlign: 'left',
+                      padding: '0.5rem 0',
+                      cursor: 'pointer',
+                      borderBottom: '1px solid rgba(255,255,255,0.03)',
+                    }}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Language switcher & CTA stacked vertically */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginTop: '0.5rem' }}>
+                <div style={{ alignSelf: 'flex-start' }}>
+                  <LanguageThemeSwitcher />
+                </div>
+                <button 
+                  onClick={() => { scrollToSection('auth-zone'); setMobileMenuOpen(false); }} 
+                  className="btn-beast"
+                  style={{ width: '100%', justifyContent: 'center', padding: '0.75rem' }}
+                >
+                  JOIN THE COMPOUND
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       {/* Hero Section */}
@@ -188,7 +348,7 @@ export const App: React.FC = () => {
 
       {/* Parallax horizontal text belt 1 */}
       <div style={{ overflow: 'hidden', padding: '1rem 0', position: 'relative', zIndex: 2 }}>
-        <motion.div style={{ x: belt1X }} className="parallax-text-belt">
+        <motion.div style={{ x: belt1X, willChange: 'transform' }} className="parallax-text-belt">
           POWER DISCIPLINE SAHIBGANJ HYPERTROPHY JHARKHAND RAW IRON
         </motion.div>
       </div>
@@ -308,7 +468,7 @@ export const App: React.FC = () => {
 
       {/* Parallax horizontal text belt 2 */}
       <div style={{ overflow: 'hidden', padding: '1rem 0', position: 'relative', zIndex: 2 }}>
-        <motion.div style={{ x: belt2X }} className="parallax-text-belt">
+        <motion.div style={{ x: belt2X, willChange: 'transform' }} className="parallax-text-belt">
           BARHARWA TEMPLE OLYMPIAN STRENGTH POWERLIFTING INDIA CORE CHAMPIONS
         </motion.div>
       </div>

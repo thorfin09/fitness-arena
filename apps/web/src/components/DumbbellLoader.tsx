@@ -109,12 +109,12 @@ export const DumbbellLoader: React.FC<DumbbellLoaderProps> = ({ onComplete }) =>
             >
               <svg width="60" height="60" viewBox="0 0 100 100">
                 {/* Outermost ring */}
-                <circle cx="50" cy="50" r="45" fill="#121827" stroke="#ff2a2a" strokeWidth="6" />
+                <circle cx="50" cy="50" r="45" fill="#121827" stroke="var(--accent-color)" strokeWidth="6" />
                 {/* Inner structure lines */}
-                <line x1="50" y1="5" x2="50" y2="95" stroke="#ff2a2a" strokeWidth="3" />
-                <line x1="5" y1="50" x2="95" y2="50" stroke="#ff2a2a" strokeWidth="3" />
+                <line x1="50" y1="5" x2="50" y2="95" stroke="var(--accent-color)" strokeWidth="3" />
+                <line x1="5" y1="50" x2="95" y2="50" stroke="var(--accent-color)" strokeWidth="3" />
                 {/* Weight typography */}
-                <circle cx="50" cy="50" r="25" fill="#ff2a2a" />
+                <circle cx="50" cy="50" r="25" fill="var(--accent-color)" />
                 <text
                   x="50"
                   y="55"
@@ -146,14 +146,14 @@ export const DumbbellLoader: React.FC<DumbbellLoaderProps> = ({ onComplete }) =>
                 margin: 0,
               }}
             >
-              FITNESS<span style={{ color: '#ff2a2a' }}>ARENA</span>
+              FITNESS<span style={{ color: 'var(--accent-color)' }}>ARENA</span>
             </motion.h1>
 
             <motion.p
               style={{
                 fontFamily: 'var(--font-title)',
                 fontSize: '1rem',
-                color: '#ff2a2a',
+                color: 'var(--accent-color)',
                 letterSpacing: '0.4em',
                 marginTop: '0.25rem',
                 textTransform: 'uppercase',
@@ -199,7 +199,7 @@ export const DumbbellLoader: React.FC<DumbbellLoaderProps> = ({ onComplete }) =>
                   width: '6px',
                   height: '6px',
                   borderRadius: '50%',
-                  backgroundColor: '#ff2a2a',
+                  backgroundColor: 'var(--accent-color)',
                   animation: 'pulse-glow 1.5s infinite',
                 }}
               />
@@ -222,7 +222,7 @@ export const DumbbellLoader: React.FC<DumbbellLoaderProps> = ({ onComplete }) =>
               <motion.div
                 style={{
                   height: '100%',
-                  backgroundColor: '#ff2a2a',
+                  backgroundColor: 'var(--accent-color)',
                 }}
                 animate={{ width: `${progress}%` }}
                 transition={{ ease: 'linear' }}
